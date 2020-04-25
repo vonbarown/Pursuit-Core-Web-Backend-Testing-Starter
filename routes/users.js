@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userQueries = require('../db/queries/users')
-const { loginRequired } = require('../auth/helpers')
-// all routes starting with /users
-router.get('/', loginRequired, async (req, res, next) => {
+
+router.get('/', async (req, res, next) => {
   try {
     let users = await userQueries.getAllUsers()
     res.json({
