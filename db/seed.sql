@@ -1,7 +1,12 @@
-DROP DATABASE IF EXISTS backend_testing_users_db;
-CREATE DATABASE backend_testing_users_db;
+-- Creating and Dropping a Database should be done manually and only once
+-- That is why the following lines are commented out
 
-\c backend_testing_users_db;
+-- DROP DATABASE IF EXISTS backend_testing_users_db;
+-- CREATE DATABASE backend_testing_users_db;
+-- \c backend_testing_users_db;
+
+DROP TABLE notes;
+DROP TABLE users;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -18,7 +23,7 @@ CREATE TABLE notes (
 
 INSERT INTO users (username, password_digest) 
   VALUES 
-                -- "hello123" in plain text
+     --  password is "hello123" in plain text
     ('JonSnow', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.'),
     ('MichaelJordan', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.');
 
