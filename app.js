@@ -6,6 +6,7 @@ var session = require('express-session')
 var passport = require('./auth/passport')
 var cors = require('cors')
 
+var notesRouter = require('./routes/notes');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 
@@ -29,6 +30,7 @@ app.use(passport.session())
 
 // Routes
 
+app.use('/api/notes', notesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
