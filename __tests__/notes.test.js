@@ -8,8 +8,6 @@ const testUser = {
 
 beforeEach(async () => {
   resetDB()
-  await signupTestUser(testUser)
-  await loginTestUser(testUser)
 })
 
 afterEach(async () => {
