@@ -44,13 +44,13 @@ router.post('/', loginRequired, async (req, res, next) => {
   }
 });
 
-router.get('/byUser/:user_id', loginRequired, async (req, res, next) => {
-  const { user_id } = req.params
+router.get('/mine', loginRequired, async (req, res, next) => {
+  const user_id = req.user.id
   try {
     let notes = await notesQueries.getNotesByUserId(user_id)
     res.json({
       payload: notes,
-      msg: "Retrieved notes by user_id",
+      msg: "Retrieved your notes",
       err: false
     })
   } catch (err) {

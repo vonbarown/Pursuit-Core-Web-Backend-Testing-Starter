@@ -69,4 +69,33 @@ describe('Notes', () => {
     expect(new Date(note.created_at)).toBeValidDate()
   })
 
+  test('A logged in user can retrieve his public and private notes', async () => {
+    expect.assertions(11)
+
+    // Log in JonSnow, who has some notes
+    await loginTestUser({
+      username: 'JonSnow',
+      password: 'hello123'
+    })
+
+    const { status, body } = await reqAgent.get('/api/notes/mine')
+    expect(status).toBe(200)
+
+    expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+    expect(body.err).toBeFalse()
+    expect(body.msg).toMatch(/retrieved your notes/i)
+
+    const notes = body.payload
+    expect(notes).toBeArrayOfSize(2) // JonSnow has two notes one public one private
+
+    // Sample and test values of one note
+    expect(notes[0]).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
+    expect(new Date(notes[0].created_at)).toBeValidDate()
+    expect(notes[0].id).toBeNumber()
+    expect(notes[0].user_id).toBeNumber()
+    expect(notes[0].text).toBeString()
+    expect(notes[0].is_public).toBe(true)
+  })
+
+  test.todo('When user is not logged they can\'t retrieve their notes')
 })
