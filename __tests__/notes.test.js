@@ -1,22 +1,18 @@
 const { reqAgent, signupTestUser, loginTestUser, logoutTestUser } = require('../util/testHelpers')
 const resetDb = require('../db/resetDb');
 
-const testUser = {
-  username: "testerUser123",
-  password: "tercesrepus"
-}
-
 beforeEach(async () => {
-  resetDb()
-})
-
-afterAll(() => {
   resetDb()
 })
 
 afterEach(async () => {
   await logoutTestUser()
 })
+
+afterAll(() => {
+  resetDb()
+})
+
 
 describe('Notes', () => {
   test('All public notes are retrieved', async () => {
