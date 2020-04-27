@@ -6,7 +6,7 @@ const passport = require('../auth/passport');
 
 
 router.post("/signup", async (req, res, next) => {
-  console.log('body', req.body)
+  // (console.log('body', req.body))
 
   try {
     const passwordDigest = await authHelpers.hashPassword(req.body.password)
@@ -33,7 +33,7 @@ router.post("/signup", async (req, res, next) => {
 })
 
 router.post("/login", passport.authenticate('local'), (req, res, next) => {
-  console.log(req.body)
+  // (console.log(req.body))
   res.json({
     payload: req.user,
     msg: "User successfully logged in",
