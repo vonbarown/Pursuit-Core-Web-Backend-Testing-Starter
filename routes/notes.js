@@ -4,7 +4,7 @@ const notesQueries = require('../db/queries/notes')
 const { loginRequired } = require('../auth/helpers')
 
 
-router.get('/', async (req, res, next) => {
+router.get('/public', async (req, res, next) => {
   try {
     let notes = await notesQueries.getPublicNotes()
     res.json({

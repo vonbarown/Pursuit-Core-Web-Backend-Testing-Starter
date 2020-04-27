@@ -17,10 +17,10 @@ afterEach(async () => {
 })
 
 describe('Notes', () => {
-  test('All notes are retrieved', async () => {
+  test('All public notes are retrieved', async () => {
     expect.assertions(11)
 
-    const { status, body } = await reqAgent.get('/api/notes')
+    const { status, body } = await reqAgent.get('/api/notes/public')
     expect(status).toBe(200)
     expect(body).toContainAllKeys(['err', 'msg', 'payload'])
     expect(body.err).toBeFalse()
