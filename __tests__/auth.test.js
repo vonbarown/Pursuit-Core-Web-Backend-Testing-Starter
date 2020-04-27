@@ -6,6 +6,10 @@ beforeEach(() => {
   resetDb()
 })
 
+afterAll(() => {
+  resetDb()
+})
+
 describe('Auth', () => {
   test('User can register and a success message is sent', (done) => {
     const user = {

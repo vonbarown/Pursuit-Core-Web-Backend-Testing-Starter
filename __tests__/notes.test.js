@@ -1,5 +1,5 @@
 const { reqAgent, signupTestUser, loginTestUser, logoutTestUser } = require('../util/testHelpers')
-const resetDB = require('../db/resetDb');
+const resetDb = require('../db/resetDb');
 
 const testUser = {
   username: "testerUser123",
@@ -7,7 +7,11 @@ const testUser = {
 }
 
 beforeEach(async () => {
-  resetDB()
+  resetDb()
+})
+
+afterAll(() => {
+  resetDb()
 })
 
 afterEach(async () => {
