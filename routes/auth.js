@@ -19,7 +19,7 @@ router.post("/signup", async (req, res, next) => {
     let newUser = await userQueries.addNewUser(userInfo)
     res.json({
       payload: newUser,
-      msg: "Success adding a new user",
+      msg: "User successfully signed up",
       err: false
     })
   } catch (err) {
