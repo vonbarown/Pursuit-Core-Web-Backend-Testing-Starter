@@ -17,7 +17,7 @@ CREATE TABLE users (
 CREATE TABLE notes (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id),
-  message VARCHAR,
+  text VARCHAR,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   is_public BOOLEAN DEFAULT TRUE
 );
@@ -28,7 +28,7 @@ INSERT INTO users (username, password_digest)
     ('JonSnow', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.'),
     ('MichaelJordan', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.');
 
-INSERT INTO notes (user_id, message, is_public) 
+INSERT INTO notes (user_id, text, is_public) 
   VALUES 
     (1, 'They were born on the wrong side of the Wall — doesn''t make them monsters.', TRUE),
     (1, 'Night gathers, and now my watch begins.', FALSE),

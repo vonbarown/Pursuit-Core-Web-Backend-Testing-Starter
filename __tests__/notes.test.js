@@ -30,11 +30,11 @@ describe('Notes', () => {
     expect(notes).toBeArrayOfSize(2) // There are only 2 public notes in our database
 
     // Sample and test values of one note
-    expect(notes[0]).toContainAllKeys(['id', 'created_at', 'user_id', 'message', 'is_public'])
+    expect(notes[0]).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
     expect(new Date(notes[0].created_at)).toBeValidDate()
     expect(notes[0].id).toBeNumber()
     expect(notes[0].user_id).toBeNumber()
-    expect(notes[0].message).toBeString()
+    expect(notes[0].text).toBeString()
     expect(notes[0].is_public).toBe(true)
   })
 
@@ -50,7 +50,7 @@ describe('Notes', () => {
     let loggedInUser = await loginTestUser(user)
 
     let newNote = {
-      message: "I'm happy",
+      text: "I'm happy",
       is_public: true
     }
 
@@ -61,10 +61,10 @@ describe('Notes', () => {
     expect(body.msg).toMatch(/added new note/i)
 
     const note = body.payload
-    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'message', 'is_public'])
+    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
     expect(note.id).toBeNumber()
     expect(note.user_id).toBe(loggedInUser.id)
-    expect(note.message).toBe(newNote.message)
+    expect(note.text).toBe(newNote.text)
     expect(note.is_public).toBe(true)
     expect(new Date(note.created_at)).toBeValidDate()
   })

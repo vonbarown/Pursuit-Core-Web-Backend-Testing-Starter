@@ -7,8 +7,8 @@ const getPublicNotes = async () => {
 
 const addNewNote = async (note) => {
 	const newNoteQuery = `
-		INSERT INTO notes(user_id, message)
-			VALUES($/user_id/, $/message/)
+		INSERT INTO notes(user_id, text)
+			VALUES($/user_id/, $/text/)
 			RETURNING *
 	`
 	const newNote = await db.one(newNoteQuery, note)
