@@ -19,7 +19,7 @@ CREATE TABLE notes (
   user_id INT REFERENCES users(id),
   text VARCHAR,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  is_public BOOLEAN DEFAULT TRUE
+  is_public BOOLEAN DEFAULT false
 );
 
 INSERT INTO users (username, password_digest) 
