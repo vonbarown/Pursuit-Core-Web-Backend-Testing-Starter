@@ -1,7 +1,7 @@
 const db = require('../db')
 
-const getAllNotes = async () => {
-	const notes = await db.any("SELECT * FROM notes")
+const getPublicNotes = async () => {
+	const notes = await db.any("SELECT * FROM notes WHERE is_public = TRUE")
 	return notes;
 }
 
@@ -21,7 +21,7 @@ const getNotesByUserId = async (user_id) => {
 }
 
 module.exports = {
-	getAllNotes,
+	getPublicNotes,
 	addNewNote,
 	getNotesByUserId
 }

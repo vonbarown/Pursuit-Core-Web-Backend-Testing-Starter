@@ -6,10 +6,10 @@ const { loginRequired } = require('../auth/helpers')
 
 router.get('/', async (req, res, next) => {
   try {
-    let notes = await notesQueries.getAllNotes()
+    let notes = await notesQueries.getPublicNotes()
     res.json({
       payload: notes,
-      msg: "Retrieved all notes",
+      msg: "Retrieved all public notes",
       err: false
     })
   } catch (err) {

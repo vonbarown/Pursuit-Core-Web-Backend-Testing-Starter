@@ -18,27 +18,28 @@ afterEach(async () => {
 
 describe('Notes', () => {
   test('All notes are retrieved', async () => {
-    expect.assertions(10)
+    expect.assertions(11)
 
     const { status, body } = await reqAgent.get('/api/notes')
     expect(status).toBe(200)
     expect(body).toContainAllKeys(['err', 'msg', 'payload'])
     expect(body.err).toBeFalse()
-    expect(body.msg).toMatch(/retrieved all notes/i)
+    expect(body.msg).toMatch(/retrieved all public notes/i)
 
     const notes = body.payload
-    expect(notes).toBeArrayOfSize(4)
+    expect(notes).toBeArrayOfSize(2) // There are only 2 public notes in our database
 
     // Sample and test values of one note
-    expect(notes[0]).toContainAllKeys(['id', 'created_at', 'user_id', 'message'])
+    expect(notes[0]).toContainAllKeys(['id', 'created_at', 'user_id', 'message', 'is_public'])
     expect(new Date(notes[0].created_at)).toBeValidDate()
     expect(notes[0].id).toBeNumber()
     expect(notes[0].user_id).toBeNumber()
     expect(notes[0].message).toBeString()
+    expect(notes[0].is_public).toBe(true)
   })
 
   test('A new note can be posted', async () => {
-    expect.assertions(9)
+    expect.assertions(10)
 
     let user = {
       username: "aNewUser123",
@@ -49,7 +50,8 @@ describe('Notes', () => {
     let loggedInUser = await loginTestUser(user)
 
     let newNote = {
-      message: "I'm happy"
+      message: "I'm happy",
+      is_public: true
     }
 
     const { status, body } = await reqAgent.post('/api/notes').send(newNote)
@@ -59,10 +61,11 @@ describe('Notes', () => {
     expect(body.msg).toMatch(/added new note/i)
 
     const note = body.payload
-    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'message'])
+    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'message', 'is_public'])
     expect(note.id).toBeNumber()
     expect(note.user_id).toBe(loggedInUser.id)
     expect(note.message).toBe(newNote.message)
+    expect(note.is_public).toBe(true)
     expect(new Date(note.created_at)).toBeValidDate()
   })
 
