@@ -67,7 +67,7 @@ describe('Notes', () => {
     expect(note.id).toBeNumber()
     expect(note.user_id).toBe(loggedInUser.id)
     expect(note.text).toBe(newNote.text)
-    expect(note.is_public).toBe(false)
+    expect(note.is_public).toBe(newNote.is_public)
     expect(new Date(note.created_at)).toBeValidDate()
   })
 
