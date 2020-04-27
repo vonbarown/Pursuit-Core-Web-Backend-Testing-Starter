@@ -21,7 +21,7 @@ Today we will be testing a Backend Application that handles users and notes. Som
   git clone https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter.git
   cd Pursuit-Core-Web-Backend-Testing-Starter
   npm install
-  ``
+  ``1
 
 2. Install dev dependencies
 
