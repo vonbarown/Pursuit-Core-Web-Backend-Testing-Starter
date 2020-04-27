@@ -49,7 +49,7 @@ describe('Notes', () => {
 
     let newNote = {
       text: "I'm happy",
-      is_public: true
+      is_public: false
     }
 
     const { status, body } = await reqAgent.post('/api/notes').send(newNote)
@@ -63,7 +63,7 @@ describe('Notes', () => {
     expect(note.id).toBeNumber()
     expect(note.user_id).toBe(loggedInUser.id)
     expect(note.text).toBe(newNote.text)
-    expect(note.is_public).toBe(true)
+    expect(note.is_public).toBe(false)
     expect(new Date(note.created_at)).toBeValidDate()
   })
 
@@ -96,5 +96,16 @@ describe('Notes', () => {
     }
   })
 
-  test.todo('When user is not logged they can\'t retrieve their notes')
+  test('When user is not logged they can\'t retrieve their notes', async () => {
+    // User is not logged in but request to /api/note/mine is made
+    const { status, body } = await reqAgent.get('/api/notes/mine')
+
+    expect(status).toBe(401)
+
+    expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+    expect(body.err).toBe(true)
+    expect(body.msg).toBe("You need to be logged in to access this route")
+    expect(body.payload).toBe(null)
+
+  })
 })
