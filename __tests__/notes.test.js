@@ -58,12 +58,11 @@ describe('Notes', () => {
   })
 
   test('A new anonymous note can be posted', async () => {
-    expect.assertions(9)
     let newNote = {
       text: "This is an anon note. Not associated with any user",
     }
 
-    const { status, body } = reqAgent.post('/api/notes/anonymous').send(newNote)
+    const { status, body } = await reqAgent.post('/api/notes/anonymous').send(newNote)
     expect(status).toBe(200)
     expect(body).toContainAllKeys(['err', 'msg', 'payload'])
     expect(body.err).toBeFalse()
