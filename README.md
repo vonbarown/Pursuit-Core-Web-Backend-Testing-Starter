@@ -146,13 +146,13 @@ describe('/api/notes endpoints', () => {
     * Make sure you have the correct `require`s and setup.
     * This will be a similar and even simpler test than the previous one.
     * Implement your test:
-```js
+  ```js
   describe('/users endpoints', () => {
     test('GET to /api/users retrieves all users', async () => {
       // Your testing code goes here
     })
   })
-```
+  ```
 
 ### Test that a new anonymous note can be added by posting to `/api/notes/anonymous` 
 Ok, we tested retrieving data from our API. How do we test adding/posting data?
