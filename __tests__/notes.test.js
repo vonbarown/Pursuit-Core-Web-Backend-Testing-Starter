@@ -16,8 +16,8 @@ afterAll(() => {
 })
 
 
-describe('Notes', () => {
-  test('All public notes are retrieved', async () => {
+describe('/notes endpoints', () => {
+  test('GET to /notes/public retrieves all public notes', async () => {
 
     const { status, body } = await reqAgent.get('/api/notes/public')
     expect(status).toBe(200)
@@ -37,7 +37,7 @@ describe('Notes', () => {
     expect(notes[0].is_public).toBe(true)
   })
 
-  test('A new anonymous note can be posted', async () => {
+  test('POST to /notes/anonymous adds a new anonymous note', async () => {
     let newNote = {
       text: "This is an anon note. Not associated with any user",
     }
@@ -93,7 +93,7 @@ describe('Notes', () => {
   })
 
 
-  test('A logged in user can retrieve his public and private notes', async () => {
+  test('GET to /notes/mine retrieves the currently logged in user notes', async () => {
 
     // Log in JonSnow, who is in our seed file ("already signed up") and has some notes
     await reqAgent.post('/api/auth/login').send({
@@ -121,7 +121,7 @@ describe('Notes', () => {
     }
   })
 
-  test('When user is not logged they can\'t retrieve their notes', async () => {
+  test('GET to /notes/mine when no user is logged-in does not retrieve notes and returns auth error', async () => {
     // User is not logged in but request to /api/note/mine is made
     const { status, body } = await reqAgent.get('/api/notes/mine')
 
