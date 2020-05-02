@@ -1,14 +1,14 @@
 const db = require('../db')
 
-const getAllNotes = async () => {
-	const notes = await db.any("SELECT * FROM notes")
+const getPublicNotes = async () => {
+	const notes = await db.any("SELECT * FROM notes WHERE is_public = TRUE")
 	return notes;
 }
 
 const addNewNote = async (note) => {
 	const newNoteQuery = `
-		INSERT INTO notes(user_id, message)
-			VALUES($/user_id/, $/message/)
+		INSERT INTO notes(user_id, text, is_public)
+			VALUES($/user_id/, $/text/, $/is_public/)
 			RETURNING *
 	`
 	const newNote = await db.one(newNoteQuery, note)
@@ -21,7 +21,7 @@ const getNotesByUserId = async (user_id) => {
 }
 
 module.exports = {
-	getAllNotes,
+	getPublicNotes,
 	addNewNote,
 	getNotesByUserId
 }

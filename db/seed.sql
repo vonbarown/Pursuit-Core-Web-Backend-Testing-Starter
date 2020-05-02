@@ -17,8 +17,9 @@ CREATE TABLE users (
 CREATE TABLE notes (
   id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users(id),
-  message VARCHAR,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  text VARCHAR,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  is_public BOOLEAN DEFAULT false
 );
 
 INSERT INTO users (username, password_digest) 
@@ -27,10 +28,10 @@ INSERT INTO users (username, password_digest)
     ('JonSnow', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.'),
     ('MichaelJordan', '$2b$12$uGJwDajFyjjMigWICJTM/OjqAEoDwO4oLPlI9wiQDCLQax07Jygy.');
 
-INSERT INTO notes (user_id, message) 
+INSERT INTO notes (user_id, text, is_public) 
   VALUES 
-    (1, 'They were born on the wrong side of the Wall — doesn''t make them monsters.'),
-    (1, 'Night gathers, and now my watch begins.'),
-    (2, 'Some people want it to happen, some wish it would happen, others make it happen.'),
-    (2, 'Talent wins games, but teamwork and intelligence wins championships.');
+    (1, 'They were born on the wrong side of the Wall — doesn''t make them monsters.', TRUE),
+    (1, 'Night gathers, and now my watch begins.', FALSE),
+    (2, 'Some people want it to happen, some wish it would happen, others make it happen.', TRUE),
+    (2, 'Talent wins games, but teamwork and intelligence wins championships.', FALSE);
 
