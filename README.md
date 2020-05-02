@@ -8,11 +8,13 @@ Today we will be testing a Backend Application that handles users and notes. Som
   * A user can login
   * A user can logout
 * Notes
+  * Unauthenticated users can post anonymous notes.
   * Any unauthenticated user can retrieve all public notes.
   * Authenticated users can add a note.
   * Authenticated users can get the notes they have added.
+  * Anonymous notes are public by default.
 
-[This is the Backend](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter) we will use, take a look at the [API docs](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter/API.md) and take some time to look around the files, make sure there is nothing surprising or confusing about it. Try a few requests with Postman.
+[This is the Backend](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter) we will use, take a look at its README as well its files, make sure there is nothing surprising or confusing about it. Try a few requests with Postman.
 
 ## Setup
 
@@ -140,11 +142,10 @@ describe('/api/notes endpoints', () => {
 ### Your turn. `/api/users` retrieves all users
 1. Create a `users.test.js` file inside `__tests__/`
 2. Write a test that verifies that when a request to `/api/users` is made all the users are returned.
-    * **DO NOT COPY AND PASTE**. Build muscle memory.
+    * **DO NOT COPY AND PASTE CODE**. Build muscle memory.
     * Make sure you have the correct `require`s and setup.  
     * Don't forget to wrap your test into a describe
     * This will be a similar and even simpler test than the previous one.
-
 
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
