@@ -191,13 +191,13 @@ test('A new anonymous note can be posted', async () => {
 * This test involves sending/posting data just like our previous test.
 * Assert that your response was successful by checking the status code and the payload similarly to our previous test. If in doubt try this request in Postman first.
 * Implement your test
-```js
+  ```js
   describe('/api/auth endpoints', () => {
     test('POST to /api/auth/signup signs up a user', async () => {
       // Your testing code goes here
     })
   })
-```
+  ```
 
 
 ## Additional Resources
