@@ -352,6 +352,49 @@ afterEach(async () => {
 })
 ```
 
+### Test POST to `/api/notes` adds a new note that belongs to the currently logged in user
+
+```js
+  test('POST to /notes adds a new note that belongs to the currently logged in user', async () => {
+
+    // ARRANGE
+    let user = {
+      username: 'testUser2',
+      password: 'drowssap'
+    }
+
+    await reqAgent.post('/api/auth/signup').send(user) // Signup new user
+    const res = await reqAgent.post('/api/auth/login').send(user) // Login new user
+    let loggedInUser = res.body.payload
+
+    let note = {
+      text: "I'm happy",
+      is_public: false
+    }
+
+    // ACT
+    const { status, body } = await reqAgent.post('/api/notes').send(note)
+
+    // ASSERT
+    expect(status).toBe(200)
+    expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+    expect(body.err).toBeFalse()
+    expect(body.msg).toMatch(/added new note/i)
+
+    const newNote = body.payload
+    expect(newNote).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
+    expect(newNote.id).toBeNumber()
+    expect(newNote.user_id).toBe(loggedInUser.id)
+    expect(newNote.text).toBe(note.text)
+    expect(newNote.is_public).toBe(note.is_public)
+    expect(new Date(newNote.created_at)).toBeValidDate()
+  })
+```
+#### Explanation
+* Note how all tests have the three **A**s: **Arrange**, **Act** & **Assert**
+* First we we sign up and log in a new user
+* Then we send a new note. Because `reqAgent` has the cookie of the logged in user when we add a new note our backend knows who the owner of that note will be and it[ uses the currently logged in user id for the `user_id` for the note. For more see route handlers for [`POST /api/notes`](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter/blob/tested-app/routes/notes.js#L24) in the notes router.
+* We assert that we got a response with the expected keys and values
 
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
