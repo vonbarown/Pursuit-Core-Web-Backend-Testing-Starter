@@ -185,7 +185,7 @@ test('A new anonymous note can be posted', async () => {
 * Assert that our response has the expected keys and tha the values are what we expect, for instance we expect the `user_id` to be null because this is an anonymous note. We also expect the response note `text` property to be the same that we sent (`expect(note.text).toBe(newNote.text)`)
 
 ### Your turn. Test that a new user can be signed up by posting to `/api/auth/signup`
-* We could do this in `users.test.js` but I recommend having a new file `auth.test.js` instead, for user authentication test only.
+* We could do this in `users.test.js` but I recommend having a new file `auth.test.js` instead. `auth.test.js` will be for user authentication tests only.
 * Create the `__tests__/auth.test.js` test file
 * Make sure you have the correct `require`s and setup.
 * This test involves sending/posting data just like our previous test.
