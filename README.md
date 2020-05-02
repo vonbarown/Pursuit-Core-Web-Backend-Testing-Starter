@@ -156,9 +156,7 @@ describe('/api/notes endpoints', () => {
 <details>
   <summary>Compare your approach to this solution. </summary>
 
-Ask any questions that come up?
-How does yours differ from this?
-
+How does yours differ from this? Ask any questions came up?
 ```js
 // users.test.js 
 const request = require('supertest')
@@ -232,11 +230,49 @@ test('A new anonymous note can be posted', async () => {
 * Implement your test
   ```js
   describe('/api/auth endpoints', () => {
-    test('POST to /api/auth/signup signs up a user', async () => {
+    test('POST to /signup registers a user and sends user back along with success message', async () => {
       // Your testing code goes here
     })
   })
   ```
+<details>
+  <summary>Compare your approach to this solution. </summary>
+
+How does yours differ from this? Ask any questions came up?
+```js
+// auth.test.js
+const app = require('../app')
+const request = require('supertest')
+const resetDb = require('../db/resetDb')
+const reqAgent = request.agent(app)
+
+beforeEach(() => {
+  resetDb()
+})
+
+afterAll(() => {
+  resetDb()
+})
+
+describe('/api/auth endpoints', () => {
+  test('POST to /signup registers a user and sends user back along with success message', async () => {
+    const user = {
+      username: 'TestUser837',
+      password: "s3cr37"
+    }
+
+    const { status, body } = await reqAgent.post('/api/auth/signup').send(user)
+    expect(status).toBe(200)
+    expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+    expect(body.err).toBeFalse()
+    expect(body.msg).toMatch("User successfully signed up")
+    expect(body.payload.username).toBe(user.username)
+    expect(body.payload.id).toBeNumber()
+    expect(body.payload.password).toBeUndefined() // Make sure password was not returned
+  })
+})
+```
+</details>
 
 
 ## Additional Resources
