@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start:dev": "nodemon ./bin/www",
-    "test": "jest --runInBand --watch"
+    "start:dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
@@ -20,10 +19,6 @@
     "pg-promise": "^10.4.0"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
-    "jest": "^25.4.0",
-    "jest-extended": "^0.11.5",
-    "nodemon": "^2.0.2",
-    "supertest": "^4.0.2"
+    "nodemon": "^2.0.2"
   }
 }
