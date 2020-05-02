@@ -57,6 +57,28 @@ describe('Notes', () => {
     expect(notes[0].is_public).toBe(true)
   })
 
+  test('A new anonymous note can be posted', async () => {
+
+    let newNote = {
+      text: "This is an anon note. Not associated with any user",
+    }
+
+    const { status, body } = await reqAgent.post('/api/notes/anonymous').send(newNote)
+    expect(status).toBe(200)
+    expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+    expect(body.err).toBeFalse()
+    expect(body.msg).toMatch(/added new anonymous note/i)
+
+    const note = body.payload
+    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
+    expect(note.id).toBeNumber()
+    expect(note.user_id).toBe(null)
+    expect(note.text).toBe(newNote.text)
+    expect(note.is_public).toBe(true)
+    expect(new Date(note.created_at)).toBeValidDate()
+  })
+
+
   test('A new note can be posted', async () => {
 
     await signupUser(testUser)

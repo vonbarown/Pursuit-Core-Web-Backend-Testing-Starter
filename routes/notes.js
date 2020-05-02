@@ -44,6 +44,30 @@ router.post('/', loginRequired, async (req, res, next) => {
   }
 });
 
+router.post('/anonymous', async (req, res, next) => {
+  let note = {
+    user_id: null,
+    is_public: true,
+    text: req.body.text
+  }
+
+  try {
+    let newNote = await notesQueries.addNewNote(note)
+    res.json({
+      payload: newNote,
+      msg: "Added new anonymous note",
+      err: false
+    })
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      payload: null,
+      msg: "Failed to add new note",
+      err: true
+    })
+  }
+});
+
 router.get('/mine', loginRequired, async (req, res, next) => {
   const user_id = req.user.id
   try {
