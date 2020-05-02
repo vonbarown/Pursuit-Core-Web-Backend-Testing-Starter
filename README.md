@@ -396,6 +396,14 @@ afterEach(async () => {
 * Then we send a new note. Because `reqAgent` has the cookie of the logged in user when we add a new note our backend knows who the owner of that note will be and it[ uses the currently logged in user id for the `user_id` for the note. For more see route handlers for [`POST /api/notes`](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter/blob/tested-app/routes/notes.js#L24) in the notes router.
 * We assert that we got a response with the expected keys and values
 
+## Exercises
+Implement the following tests:
+
+* GET to /notes/mine retrieves the currently logged in user notes. Compare your solution to [this one on the `tested-app` branch](https://github.com/joinpursuit/Pursuit-Core-Web-Backend-Testing-Starter/blob/1017c01a5c27c75eb852dcdb284bdc0059ea0a72/__tests__/notes.test.js#L96)
+* GET to /notes/mine when no user is logged-in does not retrieve notes and returns auth error. Compare your solution to the one on the `tested-app` branch of the starter app. 
+* POST to /notes with no user logged in returns auth error and prevents adding a new note.
+* GET to /auth/isUserLoggedIn returns the currently logged in user
+
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
 * [Jest Cheatsheet](https://devhints.io/jest)
