@@ -1,12 +1,34 @@
-const { reqAgent, signupTestUser, loginTestUser, logoutTestUser } = require('../util/testHelpers')
+const request = require('supertest')
+const app = require('../app')
+const reqAgent = request.agent(app)
 const resetDb = require('../db/resetDb');
+
+const testUser = {
+  username: "user1",
+  password: "s3cr37"
+}
+
+// Helper functions
+const logoutUser = async () => {
+  await reqAgent.get('/api/auth/logout')
+}
+
+const signupUser = async (user) => {
+  const { body } = await reqAgent.post('/api/auth/signup').send(user)
+  return body.payload
+}
+
+const loginUser = async (user) => {
+  const { body } = await reqAgent.post('/api/auth/login').send(user)
+  return body.payload
+}
 
 beforeEach(() => {
   resetDb()
 })
 
 afterEach(async () => {
-  await logoutTestUser()
+  await logoutUser() // Logout user, we don't want sessions being kept in between tests
 })
 
 afterAll(() => {
@@ -37,13 +59,8 @@ describe('Notes', () => {
 
   test('A new note can be posted', async () => {
 
-    let user = {
-      username: "aNewUser123",
-      password: "secret-p4$$word123"
-    }
-
-    await signupTestUser(user)
-    let loggedInUser = await loginTestUser(user)
+    await signupUser(testUser)
+    let loggedInUser = await loginUser(testUser)
 
     let newNote = {
       text: "I'm happy",
@@ -68,7 +85,7 @@ describe('Notes', () => {
   test('A logged in user can retrieve his public and private notes', async () => {
 
     // Log in JonSnow, who has some notes
-    await loginTestUser({
+    await loginUser({
       username: 'JonSnow',
       password: 'hello123'
     })
