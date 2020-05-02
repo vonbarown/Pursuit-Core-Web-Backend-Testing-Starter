@@ -274,6 +274,84 @@ describe('/api/auth endpoints', () => {
 ```
 </details>
 
+### Test POST to `/api/auth/login` logs in a user and sends back user along with success message
+* Have in mind that you need to sign up a new user before you can log them in.
+* Implement test:
+  ```js
+  test('POST to /login logs in a user and sends back user along with success message', async () => {})
+  ```
+
+<details style="margin-left: 2em">
+<summary>Solution</summary>
+
+```js
+test('POST to /login logs in a user and sends back user along with success message', async () => {
+
+  const user = {
+    username: 'otherUser1',
+    password: "not_a_secret"
+  }
+
+  // Signup user first
+  await reqAgent.post('/api/auth/signup').send(user)
+
+  // Try to log in
+  const { status, body } = await reqAgent.post('/api/auth/login').send(user)
+
+  expect(status).toBe(200)
+  expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+  expect(body.err).toBeFalse()
+  expect(body.msg).toMatch(/success/i)
+  expect(body.payload.username).toBe(user.username)
+  expect(body.payload.id).toBeNumber()
+  expect(body.payload.password).toBeUndefined() // Make sure password was not returned
+})
+```
+</details>
+
+### Test GET to `/api/auth/logout` logs out the user currently logged in and sends success message 
+To test logging out we need to sign up and login a new user before hand.
+
+```js
+test('GET to /logout logs out the user currently logged in and sends success message', async () => {
+
+  const user = {
+    username: 'oneMoreUser1',
+    password: "not_a_secret"
+  }
+
+  await reqAgent.post('/api/auth/signup').send(user) // Signup user first
+  await reqAgent.post('/api/auth/login').send(user) // Login user 
+
+  // Try to Log out
+  const { status, body } = await reqAgent.get('/api/auth/logout')
+
+  expect(status).toBe(200)
+  expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+  expect(body.err).toBeFalse()
+  expect(body.msg).toMatch(/success/i)
+  expect(body.payload).toBe(null)
+})
+```
+
+I this test failing? Why??. It is failing as a consequence of two things:
+1. Our session storage is in memory, so when we reset our database with `resetDb` between every test users that we create on our tests are removed but if a user was logged-in a session remains active for that user even though the user is no longer in our database. When we make a new request, our backend will try to deserialize a user from the session but it wont find any in the database and it will crash sending a `500` status code.
+2. We are sharing state between our tests in the form of a cookie. It turns out that `reqAgent` preserves cookies and cookies is how our backend keeps tracks of user sessions. In the previous test logging-in a user returns a cookie that `reqAgent` will hold on to, that tests passes and when Jest moves to the next `resetDb` gets called (remember `beforeEach`). Now on this current test, when we make a request to sign-up a new user (it actually doesn't matter what request we make next, it will fail) `reqAgent` will send the cookie it has from the previous test and our server will crash because the user that cookie belonged to is no longer in our database and Passport's deserializing fails.
+
+Proof of the previous points is that if you run this test with `test.only()` instead of just `test()`, the test passes because it runs with a blank slate in terms of cookies. `test.only` causes only this test to run and the others are skipped.
+
+**⚠️ Note** 
+When you have a test that passes with `test.only()` but it doesn't pass when run with others, or vise versa it passes when run with others but it fails with `test.only()` that means your tests are influencing each other because you are sharing some kind of state between them. Get rid of the shared state. 
+
+##### Fixing this test 
+Let's get rid of the shared state for this test. At the top of your file make sure that after each test you logout the user
+
+```js
+afterEach(async () => {
+  await reqAgent.get('/api/auth/logout') // Logout user, we don't want sessions being kept in between tests
+})
+```
+
 
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
