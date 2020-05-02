@@ -1,7 +1,7 @@
 -- Creating and Dropping a Database should be done manually and only once
 -- That is why the following lines are commented out
 
--- DROP DATABASE IF EXISTS backend_testing_users_db;
+DROP DATABASE IF EXISTS backend_testing_users_db;
 -- CREATE DATABASE backend_testing_users_db;
 -- \c backend_testing_users_db;
 
