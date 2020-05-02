@@ -140,10 +140,10 @@ describe('/api/notes endpoints', () => {
 ### Your turn. `/api/users` retrieves all users
 1. Create a `users.test.js` file inside `__tests__/`
 2. Write a test that verifies that when a request to `/api/users` is made all the users are returned.
-  * **DO NOT COPY AND PASTE**. Build muscle memory.
-  * Make sure you have the correct `require`s and setup.  
-  * Don't forget to wrap your test into a describe
-  * This will be a similar and even simpler test than the previous one.
+    * **DO NOT COPY AND PASTE**. Build muscle memory.
+    * Make sure you have the correct `require`s and setup.  
+    * Don't forget to wrap your test into a describe
+    * This will be a similar and even simpler test than the previous one.
 
 
 ## Additional Resources
