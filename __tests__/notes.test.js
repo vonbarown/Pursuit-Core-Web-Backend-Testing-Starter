@@ -1,7 +1,7 @@
 const { reqAgent, signupTestUser, loginTestUser, logoutTestUser } = require('../util/testHelpers')
 const resetDb = require('../db/resetDb');
 
-beforeEach(async () => {
+beforeEach(() => {
   resetDb()
 })
 
@@ -16,7 +16,6 @@ afterAll(() => {
 
 describe('Notes', () => {
   test('All public notes are retrieved', async () => {
-    expect.assertions(11)
 
     const { status, body } = await reqAgent.get('/api/notes/public')
     expect(status).toBe(200)
@@ -37,7 +36,6 @@ describe('Notes', () => {
   })
 
   test('A new note can be posted', async () => {
-    expect.assertions(10)
 
     let user = {
       username: "aNewUser123",
@@ -68,7 +66,6 @@ describe('Notes', () => {
   })
 
   test('A logged in user can retrieve his public and private notes', async () => {
-    expect.assertions(17)
 
     // Log in JonSnow, who has some notes
     await loginTestUser({
