@@ -3,32 +3,12 @@ const app = require('../app')
 const reqAgent = request.agent(app)
 const resetDb = require('../db/resetDb');
 
-const testUser = {
-  username: "user1",
-  password: "s3cr37"
-}
-
-// Helper functions
-const logoutUser = async () => {
-  await reqAgent.get('/api/auth/logout')
-}
-
-const signupUser = async (user) => {
-  const { body } = await reqAgent.post('/api/auth/signup').send(user)
-  return body.payload
-}
-
-const loginUser = async (user) => {
-  const { body } = await reqAgent.post('/api/auth/login').send(user)
-  return body.payload
-}
-
 beforeEach(() => {
   resetDb()
 })
 
 afterEach(async () => {
-  await logoutUser() // Logout user, we don't want sessions being kept in between tests
+  await reqAgent.get('/api/auth/logout') // Logout user after each test to avoid sharing sessions between tests
 })
 
 afterAll(() => {
@@ -77,36 +57,46 @@ describe('Notes', () => {
     expect(new Date(note.created_at)).toBeValidDate()
   })
 
+  test('POST to /notes adds a new note that belongs to the currently logged in user', async () => {
 
-  test('A new note can be posted', async () => {
+    // ARRANGE
+    let user = {
+      username: 'testUser2',
+      password: 'drowssap'
+    }
 
-    await signupUser(testUser)
-    let loggedInUser = await loginUser(testUser)
+    await reqAgent.post('/api/auth/signup').send(user) // Signup new user
+    const res = await reqAgent.post('/api/auth/login').send(user) // Login new user
+    let loggedInUser = res.body.payload
 
-    let newNote = {
+    let note = {
       text: "I'm happy",
       is_public: false
     }
 
-    const { status, body } = await reqAgent.post('/api/notes').send(newNote)
+    // ACT
+    const { status, body } = await reqAgent.post('/api/notes').send(note)
+
+    // ASSERT
     expect(status).toBe(200)
     expect(body).toContainAllKeys(['err', 'msg', 'payload'])
     expect(body.err).toBeFalse()
     expect(body.msg).toMatch(/added new note/i)
 
-    const note = body.payload
-    expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
-    expect(note.id).toBeNumber()
-    expect(note.user_id).toBe(loggedInUser.id)
-    expect(note.text).toBe(newNote.text)
-    expect(note.is_public).toBe(newNote.is_public)
-    expect(new Date(note.created_at)).toBeValidDate()
+    const newNote = body.payload
+    expect(newNote).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
+    expect(newNote.id).toBeNumber()
+    expect(newNote.user_id).toBe(loggedInUser.id)
+    expect(newNote.text).toBe(note.text)
+    expect(newNote.is_public).toBe(note.is_public)
+    expect(new Date(newNote.created_at)).toBeValidDate()
   })
+
 
   test('A logged in user can retrieve his public and private notes', async () => {
 
-    // Log in JonSnow, who has some notes
-    await loginUser({
+    // Log in JonSnow, who is in our seed file ("already signed up") and has some notes
+    await reqAgent.post('/api/auth/login').send({
       username: 'JonSnow',
       password: 'hello123'
     })
