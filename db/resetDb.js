@@ -1,13 +1,17 @@
+/*
+ * resetDb.js
+ * File used to reset and reseed database tables for testing purposes
+ */
+
 const { execSync } = require('child_process')
 
 const SEED_FILE_PATH = __dirname + "/seed.sql"
-const DATABASE_NAME = "backend_testing_users_db"
+
+// Having into account that DATABASE_URL = "postgres://localhost:5432/users_notes_api_test_db"
+const DATABASE_NAME = process.env.DATABASE_URL.split('/')[3]
 
 const resetDb = () => {
-  // console.log("===== RESETTING DATABASE ====")
-  const psqlOutput = execSync(`psql -d ${DATABASE_NAME} -f ${SEED_FILE_PATH}`)
-  // console.log(psqlOutput.toString())
-  // console.log("===== DATABASE RESET COMPLETE ====")
+  execSync(`psql -d ${DATABASE_NAME} -f ${SEED_FILE_PATH}`)
 }
 
 module.exports = resetDb;
