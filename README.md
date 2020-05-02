@@ -143,9 +143,61 @@ describe('/api/notes endpoints', () => {
 1. Create a `users.test.js` file inside `__tests__/`
 2. Write a test that verifies that when a request to `/api/users` is made all the users are returned.
     * **DO NOT COPY AND PASTE CODE**. Build muscle memory.
-    * Make sure you have the correct `require`s and setup.  
-    * Don't forget to wrap your test into a describe
+    * Make sure you have the correct `require`s and setup.
     * This will be a similar and even simpler test than the previous one.
+    * Implement your test:
+```js
+  describe('/users endpoints', () => {
+    test('GET to /api/users retrieves all users', async () => {
+      // Your testing code goes here
+    })
+  })
+```
+
+### Test that a new anonymous note can be added by posting to `/api/notes/anonymous` 
+Ok, we tested retrieving data from our API. How do we test adding/posting data?
+Take a look at the following code:
+```js
+test('A new anonymous note can be posted', async () => {
+
+  let newNote = {
+    text: "This is an anon note. Not associated with any user",
+  }
+
+  const { status, body } = await reqAgent.post('/api/notes/anonymous').send(newNote)
+  expect(status).toBe(200)
+  expect(body).toContainAllKeys(['err', 'msg', 'payload'])
+  expect(body.err).toBeFalse()
+  expect(body.msg).toMatch(/added new anonymous note/i)
+
+  const note = body.payload
+  expect(note).toContainAllKeys(['id', 'created_at', 'user_id', 'text', 'is_public'])
+  expect(note.id).toBeNumber()
+  expect(note.user_id).toBe(null)
+  expect(note.text).toBe(newNote.text)
+  expect(note.is_public).toBe(true)
+  expect(new Date(note.created_at)).toBeValidDate()
+})
+```
+
+### Your turn. Test that a new user can be signed up by posting to `/api/auth/signup`
+* We could do this in `users.test.js` but I recommend having a new file `auth.test.js` instead, for user authentication test only.
+* Create the `__tests__/auth.test.js` test file
+* Make sure you have the correct `require`s and setup.
+* This test involves sending/posting data just like our previous test.
+* Assert that your response was successful by checking the status code and the payload similarly to our previous test. If in doubt try this request in Postman first.
+* Implement your test
+```js
+  describe('/api/auth endpoints', () => {
+    test('POST to /api/auth/signup signs up a user', async () => {
+      // Your testing code goes here
+    })
+  })
+```
+#### Explanation
+* To post/send data we use `reqAgent.post(url).send(data)`. Compare to example when getting data instead.
+* It's important to never forget the `await` for asynchronous code. If we do our assertions will fail
+* Assert that our response has the expected keys and tha the values are what we expect, for instance we expect the `user_id` to be null because this is an anonymous note. We also expect the response note `text` property to be the same that we sent (`expect(note.text).toBe(newNote.text)`)
 
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
