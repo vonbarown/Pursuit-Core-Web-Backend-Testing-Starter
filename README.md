@@ -179,6 +179,10 @@ test('A new anonymous note can be posted', async () => {
   expect(new Date(note.created_at)).toBeValidDate()
 })
 ```
+#### Explanation
+* To post/send data we use `reqAgent.post(url).send(data)`. Compare to example when getting data instead.
+* It's important to never forget the `await` for asynchronous code. If we do our assertions will fail
+* Assert that our response has the expected keys and tha the values are what we expect, for instance we expect the `user_id` to be null because this is an anonymous note. We also expect the response note `text` property to be the same that we sent (`expect(note.text).toBe(newNote.text)`)
 
 ### Your turn. Test that a new user can be signed up by posting to `/api/auth/signup`
 * We could do this in `users.test.js` but I recommend having a new file `auth.test.js` instead, for user authentication test only.
@@ -194,10 +198,7 @@ test('A new anonymous note can be posted', async () => {
     })
   })
 ```
-#### Explanation
-* To post/send data we use `reqAgent.post(url).send(data)`. Compare to example when getting data instead.
-* It's important to never forget the `await` for asynchronous code. If we do our assertions will fail
-* Assert that our response has the expected keys and tha the values are what we expect, for instance we expect the `user_id` to be null because this is an anonymous note. We also expect the response note `text` property to be the same that we sent (`expect(note.text).toBe(newNote.text)`)
+
 
 ## Additional Resources
 * [Jest - An Async Example](https://jestjs.io/docs/en/tutorial-async#asyncawait)
